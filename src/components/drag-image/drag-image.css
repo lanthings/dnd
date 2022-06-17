@@ -1,0 +1,26 @@
+:host {
+    --lan-drag-image-width: 50px;
+    --lan-drag-image-height: 50px;
+    --lan-drag-image-background-color: transparent;
+    --lan-drag-image-border: 1px;
+    --lan-drag-image-border-style: dashed;
+    --lan-drag-image-opacity: 1;
+    --lan-drag-image-border-color: black;
+}
+
+.container {
+    width: var(--lan-drag-image-height);
+    height: var(--lan-drag-image-height);
+    background-color: var(--lan-drag-image-background-color);
+    opacity: var(--lan-drag-image-opacity);
+    border: var(--lan-drag-image-border);
+    border-style: var(--lan-drag-image-border-style);
+    border-color: var(--lan-drag-image-border-color);
+}
+
+
+ion-icon {
+    width: 100%;
+    height: 100%;
+    opacity: 1  !important;
+}

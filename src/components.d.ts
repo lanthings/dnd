@@ -6,56 +6,74 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
-    interface MyComponent {
-        /**
-          * The first name
-         */
-        "first": string;
-        /**
-          * The last name
-         */
-        "last": string;
-        /**
-          * The middle name
-         */
-        "middle": string;
+    interface LanDrag {
+        "delay": number;
+        "dragData": string;
+        "dropZones": string;
+        "threshold": number;
+    }
+    interface LanDragImage {
+    }
+    interface LanDrop {
+        "dropZones": string;
     }
 }
+export interface LanDragCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLLanDragElement;
+}
 declare global {
-    interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
+    interface HTMLLanDragElement extends Components.LanDrag, HTMLStencilElement {
     }
-    var HTMLMyComponentElement: {
-        prototype: HTMLMyComponentElement;
-        new (): HTMLMyComponentElement;
+    var HTMLLanDragElement: {
+        prototype: HTMLLanDragElement;
+        new (): HTMLLanDragElement;
+    };
+    interface HTMLLanDragImageElement extends Components.LanDragImage, HTMLStencilElement {
+    }
+    var HTMLLanDragImageElement: {
+        prototype: HTMLLanDragImageElement;
+        new (): HTMLLanDragImageElement;
+    };
+    interface HTMLLanDropElement extends Components.LanDrop, HTMLStencilElement {
+    }
+    var HTMLLanDropElement: {
+        prototype: HTMLLanDropElement;
+        new (): HTMLLanDropElement;
     };
     interface HTMLElementTagNameMap {
-        "my-component": HTMLMyComponentElement;
+        "lan-drag": HTMLLanDragElement;
+        "lan-drag-image": HTMLLanDragImageElement;
+        "lan-drop": HTMLLanDropElement;
     }
 }
 declare namespace LocalJSX {
-    interface MyComponent {
-        /**
-          * The first name
-         */
-        "first"?: string;
-        /**
-          * The last name
-         */
-        "last"?: string;
-        /**
-          * The middle name
-         */
-        "middle"?: string;
+    interface LanDrag {
+        "delay"?: number;
+        "dragData"?: string;
+        "dropZones"?: string;
+        "onDragend"?: (event: LanDragCustomEvent<any>) => void;
+        "onDragstart"?: (event: LanDragCustomEvent<any>) => void;
+        "threshold"?: number;
+    }
+    interface LanDragImage {
+    }
+    interface LanDrop {
+        "dropZones"?: string;
     }
     interface IntrinsicElements {
-        "my-component": MyComponent;
+        "lan-drag": LanDrag;
+        "lan-drag-image": LanDragImage;
+        "lan-drop": LanDrop;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "lan-drag": LocalJSX.LanDrag & JSXBase.HTMLAttributes<HTMLLanDragElement>;
+            "lan-drag-image": LocalJSX.LanDragImage & JSXBase.HTMLAttributes<HTMLLanDragImageElement>;
+            "lan-drop": LocalJSX.LanDrop & JSXBase.HTMLAttributes<HTMLLanDropElement>;
         }
     }
 }
