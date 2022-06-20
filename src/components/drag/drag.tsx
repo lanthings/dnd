@@ -180,7 +180,7 @@ export class LanDrag {
   }
 
   private isEnabled(_ev: GestureDetail): boolean {
-    // console.log('LanDrag#isEnabled; ev:', ev);
+    // console.log('LanDrag#isEnabled; _ev:', _ev);
 
     return true;
 }
@@ -223,7 +223,7 @@ export class LanDrag {
 
         dropTarget.dispatchEvent(event);
       }
-  }
+    }
 
   }
 
@@ -282,7 +282,7 @@ export class LanDrag {
   }
 
   private isAccepted(target: Element): boolean {
-    // console.log('tagName#onPressUp; target.tagName:', target.tagName);
+    // console.log('tagName#isAccepted; target.tagName:', target.tagName);
 
     return (target.tagName === 'LAN-DROP');
   }
@@ -292,9 +292,6 @@ export class LanDrag {
   }
 
   componentDidLoad() {
-    console.log('xxxxxxxxx');
-    console.log(window);
-    console.log('xxxxxxxxx');
     this._gesture = createPressGesture({
         el: this.el,
         queue: this.queue,
@@ -309,7 +306,7 @@ export class LanDrag {
         onPressUp: (ev) => this.onPressUp(ev)
     });
 
-    this._gesture.setDisabled(false);
+    this._gesture.enable(true);
   }
 
   disconnectedCallback() {

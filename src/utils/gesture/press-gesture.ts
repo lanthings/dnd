@@ -22,21 +22,21 @@ export function createPressGesture(config: PressGestureConfig): Gesture {
   const notCaptured = finalConfig.notCaptured;
   const threshold = (finalConfig.threshold > 0 ? finalConfig.threshold : 0);
   const time = (finalConfig.time >= 251 ? finalConfig.time : 251);
-  const queue = finalConfig.queue;
+  // const queue = finalConfig.queue;
 
 
   const detail: GestureDetail = {
     type: 'press',
     startX: 0,
     startY: 0,
-    startTimeStamp: 0,
+    startTime: 0,
     currentX: 0,
     currentY: 0,
     velocityX: 0,
     velocityY: 0,
     deltaX: 0,
     deltaY: 0,
-    timeStamp: 0,
+    currentTime: 0,
     event: undefined as any,
     data: undefined
   };
@@ -84,7 +84,7 @@ export function createPressGesture(config: PressGestureConfig): Gesture {
     updateDetail(ev, detail);
     detail.startX = detail.currentX;
     detail.startY = detail.currentY;
-    detail.startTimeStamp = detail.timeStamp = timeStamp;
+    detail.startTime = detail.currentTime = timeStamp;
     detail.velocityX = detail.velocityY = detail.deltaX = detail.deltaY = 0;
     detail.event = ev;
 
@@ -130,7 +130,9 @@ export function createPressGesture(config: PressGestureConfig): Gesture {
       }
     }
 
-    queue.write(fireOnMove);
+    // TODO: check with IONIC if queue is not needed anymore
+    // queue.write(fireOnMove);
+    fireOnMove();
 
     return;
   }
@@ -161,7 +163,7 @@ export function createPressGesture(config: PressGestureConfig): Gesture {
     // more accurate value of the velocity.
     detail.startX = detail.currentX;
     detail.startY = detail.currentY;
-    detail.startTimeStamp = detail.timeStamp;
+    detail.startTime = detail.startTime;
 
     fireOnPress();
 
@@ -220,8 +222,8 @@ export function createPressGesture(config: PressGestureConfig): Gesture {
   }
 
   return {
-    setDisabled(disabled: boolean) {
-      pointerEvents.setDisabled(disabled);
+    enable(isEnabled: boolean) {
+      pointerEvents.enable(isEnabled);
     },
     destroy() {
       gesture.destroy();

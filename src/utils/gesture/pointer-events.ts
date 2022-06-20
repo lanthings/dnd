@@ -2,14 +2,16 @@ import { addEventListener } from './listener';
 
 const MOUSE_WAIT = 2000;
 
-export function createPointerEvents(
+export const createPointerEvents = (
   el: Node,
   pointerDown: any,
   pointerMove: any,
   pointerUp: any,
-  options: EventListenerOptions
-) {
-
+  options: {
+    passive?: boolean;
+    capture?: boolean;
+  }
+) => {
   let rmTouchStart: (() => void) | undefined;
   let rmTouchMove: (() => void) | undefined;
   let rmTouchEnd: (() => void) | undefined;
@@ -19,7 +21,7 @@ export function createPointerEvents(
   let rmMouseUp: (() => void) | undefined;
   let lastTouchEvent = 0;
 
-  function handleTouchStart(ev: any) {
+  const handleTouchStart = (ev: any) => {
     lastTouchEvent = Date.now() + MOUSE_WAIT;
     if (!pointerDown(ev)) {
       return;
@@ -27,17 +29,26 @@ export function createPointerEvents(
     if (!rmTouchMove && pointerMove) {
       rmTouchMove = addEventListener(el, 'touchmove', pointerMove, options);
     }
+
+    /**
+     * Events are dispatched on the element that is tapped and bubble up to
+     * the reference element in the gesture. In the event that the element this
+     * event was first dispatched on is removed from the DOM, the event will no
+     * longer bubble up to our reference element. This leaves the gesture in an
+     * unusable state. To account for this, the touchend and touchcancel listeners
+     * should be added to the event target so that they still fire even if the target
+     * is removed from the DOM.
+     */
     if (!rmTouchEnd) {
-      rmTouchEnd = addEventListener(el, 'touchend', handleTouchEnd, options);
+      rmTouchEnd = addEventListener(ev.target, 'touchend', handleTouchEnd, options);
     }
     if (!rmTouchCancel) {
-      rmTouchCancel = addEventListener(el, 'touchcancel', handleTouchEnd, options);
+      rmTouchCancel = addEventListener(ev.target, 'touchcancel', handleTouchEnd, options);
     }
-  }
+  };
 
-  function handleMouseDown(ev: any) {
+  const handleMouseDown = (ev: any) => {
     if (lastTouchEvent > Date.now()) {
-      console.debug('mousedown event dropped because of previous touch');
       return;
     }
     if (!pointerDown(ev)) {
@@ -49,23 +60,23 @@ export function createPointerEvents(
     if (!rmMouseUp) {
       rmMouseUp = addEventListener(getDocument(el), 'mouseup', handleMouseUp, options);
     }
-  }
+  };
 
-  function handleTouchEnd(ev: any) {
+  const handleTouchEnd = (ev: any) => {
     stopTouch();
     if (pointerUp) {
       pointerUp(ev);
     }
-  }
+  };
 
-  function handleMouseUp(ev: any) {
+  const handleMouseUp = (ev: any) => {
     stopMouse();
     if (pointerUp) {
       pointerUp(ev);
     }
-  }
+  };
 
-  function stopTouch() {
+  const stopTouch = () => {
     if (rmTouchMove) {
       rmTouchMove();
     }
@@ -76,9 +87,9 @@ export function createPointerEvents(
       rmTouchCancel();
     }
     rmTouchMove = rmTouchEnd = rmTouchCancel = undefined;
-  }
+  };
 
-  function stopMouse() {
+  const stopMouse = () => {
     if (rmMouseMove) {
       rmMouseMove();
     }
@@ -86,15 +97,15 @@ export function createPointerEvents(
       rmMouseUp();
     }
     rmMouseMove = rmMouseUp = undefined;
-  }
+  };
 
-  function stop() {
+  const stop = () => {
     stopTouch();
     stopMouse();
-  }
+  };
 
-  function setDisabled(disabled: boolean) {
-    if (disabled) {
+  const enable = (isEnabled = true) => {
+    if (!isEnabled) {
       if (rmTouchStart) {
         rmTouchStart();
       }
@@ -103,7 +114,6 @@ export function createPointerEvents(
       }
       rmTouchStart = rmMouseStart = undefined;
       stop();
-
     } else {
       if (!rmTouchStart) {
         rmTouchStart = addEventListener(el, 'touchstart', handleTouchStart, options);
@@ -112,23 +122,23 @@ export function createPointerEvents(
         rmMouseStart = addEventListener(el, 'mousedown', handleMouseDown, options);
       }
     }
-  }
+  };
 
-  function destroy() {
-    setDisabled(true);
+  const destroy = () => {
+    enable(false);
     pointerUp = pointerMove = pointerDown = undefined;
-  }
+  };
 
   return {
-    setDisabled,
+    enable,
     stop,
-    destroy
+    destroy,
   };
-}
+};
 
-function getDocument(node: Node) {
+const getDocument = (node: Node) => {
   return node instanceof Document ? node : node.ownerDocument;
-}
+};
 
 export interface PointerEventsConfig {
   element?: HTMLElement;
