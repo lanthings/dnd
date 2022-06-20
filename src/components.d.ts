@@ -52,8 +52,8 @@ declare namespace LocalJSX {
         "delay"?: number;
         "dragData"?: string;
         "dropZones"?: string;
-        "onDragend"?: (event: LanDragCustomEvent<any>) => void;
-        "onDragstart"?: (event: LanDragCustomEvent<any>) => void;
+        "onDndend"?: (event: LanDragCustomEvent<any>) => void;
+        "onDndstart"?: (event: LanDragCustomEvent<any>) => void;
         "threshold"?: number;
     }
     interface LanDragImage {

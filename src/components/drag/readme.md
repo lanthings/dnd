@@ -17,10 +17,10 @@
 
 ## Events
 
-| Event       | Description | Type               |
-| ----------- | ----------- | ------------------ |
-| `dragend`   |             | `CustomEvent<any>` |
-| `dragstart` |             | `CustomEvent<any>` |
+| Event      | Description | Type               |
+| ---------- | ----------- | ------------------ |
+| `dndend`   |             | `CustomEvent<any>` |
+| `dndstart` |             | `CustomEvent<any>` |
 
 
 ----------------------------------------------

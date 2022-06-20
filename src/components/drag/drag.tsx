@@ -31,17 +31,17 @@ export class LanDrag {
 
   private queue!: QueueApi;
 
-  @Event() dragstart: EventEmitter;
-  @Event() dragend: EventEmitter;
+  @Event() dndstart: EventEmitter;
+  @Event() dndend: EventEmitter;
 
   @State() isDragging = false;
 
 
-  private dragStart(p: { x: number, y: number }) {
+  private dndStart(p: { x: number, y: number }) {
     this.isDragging = true;
 
-    // console.log(`dragstart: dropZones '${this.dropZones}'`);
-    // console.log(`dragstart: dragData '${this.dragData}'`);
+    // console.log(`dndstart: dropZones '${this.dropZones}'`);
+    // console.log(`dndstart: dragData '${this.dragData}'`);
 
     let top: number, left: number;
 
@@ -102,7 +102,7 @@ export class LanDrag {
 
     document.body.appendChild(this._dragElement);
 
-    this.dragstart.emit();
+    this.dndstart.emit();
   }
 
 
@@ -166,16 +166,16 @@ export class LanDrag {
     });
   }
 
-  private dragEnd() {
+  private dndEnd() {
     if (this._dragElement) {
-      // console.log('LanDrag#dragEnd');
+      // console.log('LanDrag#dndEnd');
 
       document.body.removeChild(this._dragElement);
       this._dragElement = undefined;
     }
 
     if (this.isDragging) {
-      this.dragend.emit();
+      this.dndend.emit();
     }
   }
 
@@ -188,7 +188,7 @@ export class LanDrag {
   private onPress(ev: GestureDetail) {
     // console.log('LanDrag#onPress; ev:', ev);
 
-    this.dragStart({ x: ev.startX, y: ev.startY });
+    this.dndStart({ x: ev.startX, y: ev.startY });
   }
 
   private onMove(ev: GestureDetail) {
@@ -248,7 +248,7 @@ export class LanDrag {
       dropTarget.dispatchEvent(event);
     }
 
-    this.dragEnd();
+    this.dndEnd();
     this.reset();
   }
 
@@ -310,7 +310,7 @@ export class LanDrag {
   }
 
   disconnectedCallback() {
-    this.dragEnd();
+    this.dndEnd();
     this.reset();
 
     if (this._gesture) {

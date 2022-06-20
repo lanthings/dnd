@@ -24,8 +24,8 @@
         document.getElementsByTagName('lan-battery-value')[0].setAttribute('percentage', 60);
       }, 2000);
 
-      function dragStart() {
-        console.log('dragStart');
+      function dndStart() {
+        console.log('dndStart');
       }
     </script>
     <!--
@@ -120,7 +120,7 @@
           </ion-row>
           <ion-row>
             <ion-col style="border-style: solid;" class="ion-margin">
-              <lan-drag drop-zones="c,d" ondragstart="dragStart()">
+              <lan-drag drop-zones="c,d" ondndstart="dndStart()">
                 <div style="height: 50px; background-color: red">ABC<div style="background-color:green">DEF</div></div>
               </lan-drag>
             </ion-col>
@@ -148,7 +148,7 @@
     </ion-app>
     <!-- with html components -->
     <!-- <div>
-        <div draggable="true" ondragstart="dragStart(event)" style="width: 100px; height: 100px; border: 1px; border-style: solid;">AAAAAAAA</div>
+        <div draggable="true" ondndstart="dndStart(event)" style="width: 100px; height: 100px; border: 1px; border-style: solid;">AAAAAAAA</div>
     </div>
     <div>
         <div draggable="true" style="width: 100px; height: 100px; border: 1px; border-style: solid;">BBBBBBBB</div>
@@ -233,7 +233,7 @@
 
     <div draggable="true" id="wrapper"
            style="width:200px; height:200px; background-color: yellow;"
-           ondragstart="handleDragStart(event)">ABC
+           ondndstart="handleDndStart(event)">ABC
     </div> -->
     <!-- <div id="drag-coveredup" class="dragdemo" draggable="true">drag me</div>
     <div id="coverup"></div> -->
